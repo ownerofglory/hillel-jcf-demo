@@ -14,4 +14,8 @@ public class Person implements Cloneable {
         copy.friends = new ArrayList<>();
         return copy;
     }
+
+    public String getName() {
+        return name;
+    }
 }

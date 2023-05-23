@@ -1,10 +1,121 @@
 package ua.ithillel.jcf;
 
+import ua.ithillel.jcf.map.MyHashMap;
+import ua.ithillel.jcf.map.MyMap;
+import ua.ithillel.jcf.map.MyTreeMap;
+import ua.ithillel.jcf.model.Employee;
+import ua.ithillel.jcf.model.Human;
+
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
+        // FIXME: using comparator example
+//        Map<Person, Integer> map = new TreeMap<>((o1, o2)
+//                -> o1.getName().compareTo(o2.getName()));
+//        map.put(new Person(), 15);
+
+//        Comparator<Human> humanAgeComparator = (o1, o2) -> {
+//            return o2.getAge() - o1.getAge();
+//        };
+
+
+        // FIXME: own tree map implementation
+//        MyMap<Integer, String> myMap = new MyTreeMap<>();
+//        myMap.put(13, "Hello");
+//        myMap.put(8, "World");
+//        myMap.put(17, "Hillel");
+//        myMap.put(11, "Hi");
+//
+//        String s1 = myMap.get(8);
+//        String s2 = myMap.get(11);
+//        String s3 = myMap.get(17);
+//
+//        myMap.remove(13);
+//
+//        System.out.println();
+
+        // FIXME: own hash map implementation
+//        MyMap<String, Integer> cityPopulation = new MyHashMap<>();
+//
+//        //
+//        cityPopulation.put("New York", 18_937_000);
+//        cityPopulation.put("Miami", 6_265_000);
+//        cityPopulation.put("Kyiv", 3_000_000);
+//        cityPopulation.put("Atlanta", 6_000_000);
+//        cityPopulation.put("Philadelphia", 5_800_000);
+//        cityPopulation.put("Mumbai", 21_000_000);
+//        cityPopulation.put("Lagos", 16_000_000);
+//
+//        cityPopulation.put("Tianjin", 14_000_000);
+//        cityPopulation.put("San Antonio", 2_000_000);
+//        cityPopulation.put("Baltimore", 2_000_000);
+//        cityPopulation.put("Austin", 2_000_000);
+//
+//        cityPopulation.put(null, 34545);
+//        Integer integer = cityPopulation.get(null);
+//
+//        Integer kyiv = cityPopulation.get("Kyiv");
+//        Integer mumbai = cityPopulation.get("Mumbai");
+//
+//        System.out.println(cityPopulation);
+
+        // FIXME: Maps demo
+//        Map<String, Integer> cityPopulation = new HashMap<>();
+//
+//        cityPopulation.put("New York", 18_937_000);
+//        cityPopulation.put("Miami", 6_265_000);
+//        cityPopulation.put("Kyiv", 3_000_000);
+//
+//        Integer kyivPopulation = cityPopulation.get("Kyiv");
+//
+//        System.out.println(cityPopulation);
+//        System.out.println("Kyiv:" + kyivPopulation);
+//
+//        cityPopulation.remove("Miami");
+//
+//        System.out.println(cityPopulation);
+//
+//        cityPopulation.put("Kyiv", 3_100_000);
+//
+//        System.out.println(cityPopulation);
+
+
+        // FIXME: method equals example
+        // maps in the  app
+        // mobile apps
+
+        // reflective
+
+        // transitive
+        // x.equals(y) y.equals(z) => x.equals(z)
+
+        //symmetry
+
+//        Human ivan = new Employee("Ivan", 28, "Developer");
+//        Human ivan1 = new Human("Ivan", 28);
+//
+//        boolean equals = ivan1.equals(ivan);
+//        boolean equals1 = ivan.equals(ivan1);
+//
+//
+//        List<Human> people = new ArrayList<>();
+//        Human john = new Human("John", 34);
+//        Human jane = new Human("Jane", 34);
+//
+//        john.equals(john);
+//
+//
+//        people.add(john);
+//        people.add(jane);
+//        people.add(new Human("Alice", 28));
+//        people.add(new Human("Bob", 50));
+//
+//        System.out.println(people);
+//
+//        boolean johnExists = people.contains(new Human("John", 34));
+//        System.out.println("John exists: " + johnExists);
 
         // FIXME: empty list
         // head -> NULL
