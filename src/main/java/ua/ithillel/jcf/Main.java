@@ -1,16 +1,172 @@
 package ua.ithillel.jcf;
 
+import ua.ithillel.jcf.comparator.GpaComparator;
 import ua.ithillel.jcf.map.MyHashMap;
 import ua.ithillel.jcf.map.MyMap;
 import ua.ithillel.jcf.map.MyTreeMap;
 import ua.ithillel.jcf.model.Employee;
 import ua.ithillel.jcf.model.Human;
+import ua.ithillel.jcf.model.Student;
 
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        // FIXME: PriorityQueue Demo
+
+        Student vasyl = new Student("Vasyl", 21, 75);
+        Student anna = new Student("Anna", 22, 89);
+        Student petro = new Student("Petro", 35, 87);
+        Student ivan = new Student("Ivan", 48, 72);
+        Student olha = new Student("Olha", 31, 90);
+        Student maxim = new Student("Maxim", 37, 91);
+
+        Comparator<Student> gpaComparator = (s1, s2) ->  s2.getGpa() - s1.getGpa();
+//        Comparator<Student> gpaComparator = new GpaComparator();
+//        Comparator<Student> gpaComparator = new Comparator<Student>() {
+//            @Override
+//            public int compare(Student o1, Student o2) {
+//                return o2.getGpa() - o1.getGpa();
+//            }
+//        };
+
+       PriorityQueue<Student> gradedStudents = new PriorityQueue<>(gpaComparator);
+
+
+
+        gradedStudents.add(vasyl);
+        gradedStudents.add(anna);
+        gradedStudents.add(petro);
+        gradedStudents.add(ivan);
+        gradedStudents.add(olha);
+        gradedStudents.add(maxim);
+
+        gradedStudents.removeIf(student -> student.getGpa() > 75);
+
+        System.out.println("Graded students: " + gradedStudents);
+
+
+        // FIXME: Deque demo
+        // deck - deque - double ended queue
+//        Deque<Student> deque = new LinkedList<>();
+//
+//        deque.add(vasyl);
+//        deque.add(anna);
+//        deque.addLast(petro);
+//        deque.add(olha);
+//        deque.add(maxim);
+//        deque.addFirst(ivan);
+//
+//        System.out.println("Deque: " +  deque);
+//
+        // FIXME: Queues demo
+//
+//        Queue<Student> cafeQueue = new LinkedList<>();
+//
+//        cafeQueue.add(vasyl);
+//        cafeQueue.add(anna);
+//        cafeQueue.add(petro);
+//        cafeQueue.add(ivan);
+//        cafeQueue.add(olha);
+//        cafeQueue.add(maxim);
+//
+//        System.out.println("Queue: " + cafeQueue);
+//        while (!cafeQueue.isEmpty()) {
+//            Student peek = cafeQueue.peek(); // nullable
+//            Student element = cafeQueue.element(); // throwable
+//            Student first = cafeQueue.remove(); // throwable
+//            System.out.printf("Student %s%n", first);
+//        }
+//
+//        Student student = cafeQueue.poll(); // nullable
+
+
+        // FIXME: Sets demo
+//        Comparator<Student> ageComparator = (s1, s2) -> s1.getAge() - s2.getAge();
+//        SortedSet<Student> students = new TreeSet<>(ageComparator);
+//
+//        Student vasyl = new Student("Vasyl", 21);
+//        Student anna = new Student("Anna", 22);
+//        Student petro = new Student("Petro", 35);
+//        Student ivan = new Student("Ivan", 48);
+//        Student olha = new Student("Olha", 31);
+//        Student maxim = new Student("Maxim", 37);
+//
+//        students.add(vasyl);
+//        students.add(anna);
+//        students.add(petro);
+//        students.add(ivan);
+//        students.add(olha);
+//        students.add(maxim);
+//
+//        System.out.println("Students: " + students);
+//        System.out.println("Before Maxim: "+ students.headSet(maxim));
+//        System.out.println("After Maxim: "+ students.tailSet(maxim));
+//        System.out.println("Between Ivan and Petro: "+ students.subSet(petro, ivan));
+//
+//        Set<Student> javaStudents = new HashSet<>();
+//        Set<Student> javaStudents = new LinkedHashSet<>();
+//        Set<Student> frontendStudents = new HashSet<>();
+//
+//        Student vasyl = new Student("Vasyl", 21);
+//        Student anna = new Student("Anna", 22);
+//        Student petro = new Student("Petro", 35);
+//        Student ivan = new Student("Ivan", 48);
+//        Student olha = new Student("Olha", 31);
+//        Student maxim = new Student("Maxim", 37);
+//
+//        javaStudents.add(vasyl);
+//        javaStudents.add(anna);
+//        javaStudents.add(petro);
+//        javaStudents.add(ivan);
+//        javaStudents.add(olha);
+//
+//        frontendStudents.add(anna);
+//        frontendStudents.add(petro);
+//        frontendStudents.add(maxim);
+//
+//        System.out.println("Java Students: " + javaStudents);
+//        System.out.println("Frontend Students: " + frontendStudents);
+//
+//        Set<Student> allStudents = new HashSet<>();
+//        allStudents.addAll(javaStudents);
+//        allStudents.addAll(frontendStudents);
+//
+//        System.out.println("All students: " + allStudents);
+//
+//        Set<Student> javaAndFrontendStudent = new HashSet<>();
+//        javaAndFrontendStudent.addAll(javaStudents);
+//        javaAndFrontendStudent.retainAll(frontendStudents);
+//
+//        System.out.println("java&frontend students: " + javaAndFrontendStudent);
+//
+//        int size = javaStudents.size();
+//        System.out.println("Does Vasyl study Java? " + javaStudents.contains(vasyl));
+
+    // FIXME: maps' key set
+
+//        Map<Integer, Integer> someMap = new HashMap<>();
+//        someMap.put(1, 3);
+//        someMap.put(4, 3);
+//        someMap.put(7, 3);
+//
+//        for (Integer integer : someMap.keySet()) {
+//            System.out.println(someMap.get(integer));
+//        }
+//
+//        Collection<Integer> values = someMap.values();
+//        Set<Integer> integers = someMap.keySet();
+
+        System.out.println();
+
+
+        // Optional
+        // BigDecimal, BigInteger
+        // double, float, int, long
+        // RegEx
+
         // FIXME: using comparator example
 //        Map<Person, Integer> map = new TreeMap<>((o1, o2)
 //                -> o1.getName().compareTo(o2.getName()));
@@ -144,11 +300,11 @@ public class Main {
         // head -> 3 -> 5 -> 8 -> 1 -> 34 -> NULL
 
         // FIXME: difference between abstract data structure and implementation
-        List<String> strList = new ArrayList<>();
-        List<String> strList1 = new LinkedList<>();
-
-        Queue<String> queue = new LinkedList<>();
-        Deque<String> deque = new LinkedList<>();
+//        List<String> strList = new ArrayList<>();
+//        List<String> strList1 = new LinkedList<>();
+//
+//        Queue<String> queue = new LinkedList<>();
+//        Deque<String> deque = new LinkedList<>();
 
 
 
