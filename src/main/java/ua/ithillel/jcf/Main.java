@@ -1,5 +1,9 @@
 package ua.ithillel.jcf;
 
+import ua.ithillel.jcf.algo.ArithmeticUtils;
+import ua.ithillel.jcf.algo.SearchUtils;
+import ua.ithillel.jcf.algo.SortUtils;
+import ua.ithillel.jcf.algo.StringCustomUtils;
 import ua.ithillel.jcf.comparator.GpaComparator;
 import ua.ithillel.jcf.map.MyHashMap;
 import ua.ithillel.jcf.map.MyMap;
@@ -13,15 +17,98 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-
-        // FIXME: PriorityQueue Demo
-
+        // FIXME: merge sort example
         Student vasyl = new Student("Vasyl", 21, 75);
         Student anna = new Student("Anna", 22, 89);
         Student petro = new Student("Petro", 35, 87);
         Student ivan = new Student("Ivan", 48, 72);
         Student olha = new Student("Olha", 31, 90);
         Student maxim = new Student("Maxim", 37, 91);
+
+        Student[] students = new Student[] {
+                vasyl, anna, petro, ivan, olha, maxim
+        };
+//        SortUtils.bubbleSort(students);
+        SortUtils.mergeSort(students, 0, students.length - 1);
+        System.out.println("Sorted students " + Arrays.toString(students));
+
+        int[] unsortedArr = new int[] {3, 45, 2, 6, 0, -2, 8, 13};
+        SortUtils.mergeSortInt(unsortedArr, 0, unsortedArr.length - 1);
+        System.out.println("Merge sort: " + Arrays.toString(unsortedArr));
+
+        // FIXME: bubble sort example
+        SortUtils.bubbleSortInt(unsortedArr);
+        System.out.println(Arrays.toString(unsortedArr));
+
+
+        // FIXME: binary search example
+
+        String[] strArr = new String[]{ "A", "B", "D", "M", "N", "P", "X"  };
+
+        System.out.println("Binary Search string: "
+                + SearchUtils.binarySearch(strArr, "D", 0, strArr.length));
+
+        int[] intArrSorted = new int[] {1, 4, 6, 9, 12, 34, 45, 47, 49};
+        System.out.println("Binary Search: " +
+                SearchUtils.binarySearchInt(intArrSorted, 34, 0, intArrSorted.length));
+
+        // FIXME: linear search example
+
+        int[] intArr = {1, 4, 5, 6, 24, 9, -1};
+        Integer[] integers = {1, 4, 5, 6, 24, 9, -1};
+
+
+
+        System.out.println("Linear search:"
+                +  SearchUtils.linearSearchInt(intArr, 5));
+        System.out.println("Linear search:"
+                +  SearchUtils.linearSearch(integers, 5));
+
+        System.out.println("Students: " + Arrays.toString(students));
+        System.out.println("Students search: " + SearchUtils.linearSearch(students, petro));
+
+        System.out.println(StringCustomUtils.reverse("Hello!"));
+
+
+        // FIXME: max and min generic recursive example
+
+        System.out.println("Max student: "
+                + ArithmeticUtils.max(vasyl, anna, petro, ivan, olha, maxim));
+        Comparator<Student> ageComparator = (s1, s2) -> s1.getAge() - s2.getAge();
+
+        System.out.println("Oldest student: "
+                + ArithmeticUtils.max(ageComparator, vasyl, anna, petro, ivan, olha, maxim));
+
+
+        // FIXME: max and min recursive example
+
+        System.out.println("max " + ArithmeticUtils.maxInt(3, 1, 67, 48, 9, -1, -23));
+        System.out.println("min " + ArithmeticUtils.minInt(3, 1, 67, 48, 9, -1, -23));
+
+        // FIXME: factorial recursive example
+
+        System.out.println("0! = " + ArithmeticUtils.factorial(0));
+        System.out.println("1! = " + ArithmeticUtils.factorial(1));
+        System.out.println("2! = " + ArithmeticUtils.factorial(2));
+        System.out.println("3! = " + ArithmeticUtils.factorial(3));
+        System.out.println("4! = " + ArithmeticUtils.factorial(4));
+
+        // 0! = 1
+        // 1! = 1 = 1 * 0!
+        // 2! = 1 * 2 = 2 * 1!
+        // 3! = 1 * 2 * 3 = 6 = 3 * 2!
+        // 4! = 1 * 3 * 3 * 4 = 24 = 4 * 3!
+
+        // n! = 1 * 2 * ... * n - 1 * n
+
+        // FIXME: PriorityQueue Demo
+
+//        Student vasyl = new Student("Vasyl", 21, 75);
+//        Student anna = new Student("Anna", 22, 89);
+//        Student petro = new Student("Petro", 35, 87);
+//        Student ivan = new Student("Ivan", 48, 72);
+//        Student olha = new Student("Olha", 31, 90);
+//        Student maxim = new Student("Maxim", 37, 91);
 
         Comparator<Student> gpaComparator = (s1, s2) ->  s2.getGpa() - s1.getGpa();
 //        Comparator<Student> gpaComparator = new GpaComparator();
@@ -32,20 +119,20 @@ public class Main {
 //            }
 //        };
 
-       PriorityQueue<Student> gradedStudents = new PriorityQueue<>(gpaComparator);
-
-
-
-        gradedStudents.add(vasyl);
-        gradedStudents.add(anna);
-        gradedStudents.add(petro);
-        gradedStudents.add(ivan);
-        gradedStudents.add(olha);
-        gradedStudents.add(maxim);
-
-        gradedStudents.removeIf(student -> student.getGpa() > 75);
-
-        System.out.println("Graded students: " + gradedStudents);
+//       PriorityQueue<Student> gradedStudents = new PriorityQueue<>(gpaComparator);
+//
+//
+//
+//        gradedStudents.add(vasyl);
+//        gradedStudents.add(anna);
+//        gradedStudents.add(petro);
+//        gradedStudents.add(ivan);
+//        gradedStudents.add(olha);
+//        gradedStudents.add(maxim);
+//
+//        gradedStudents.removeIf(student -> student.getGpa() > 75);
+//
+//        System.out.println("Graded students: " + gradedStudents);
 
 
         // FIXME: Deque demo
@@ -415,5 +502,6 @@ public class Main {
 //        }
 //
 //        int[] intArrayDefaultValue = new int[12];
+
     }
 }

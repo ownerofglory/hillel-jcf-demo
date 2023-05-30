@@ -9,3 +9,6 @@
 - Sets demo
 - Queue and Deque demo
 - PriorityQueue
+- Recursive algos demo: min, max, factorial, string reverse
+- Search algos
+- Sort algos
