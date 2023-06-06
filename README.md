@@ -12,3 +12,5 @@
 - Recursive algos demo: min, max, factorial, string reverse
 - Search algos
 - Sort algos
+- Tree algos: breadth and depth first
+- Binary Search Tree

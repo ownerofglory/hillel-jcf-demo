@@ -11,87 +11,179 @@ import ua.ithillel.jcf.map.MyTreeMap;
 import ua.ithillel.jcf.model.Employee;
 import ua.ithillel.jcf.model.Human;
 import ua.ithillel.jcf.model.Student;
+import ua.ithillel.jcf.tree.BinarySearchTree;
+import ua.ithillel.jcf.tree.SearchTree;
+import ua.ithillel.jcf.tree.TreeNode;
+import ua.ithillel.jcf.tree.TreeUtil;
 
 import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        // FIXME: binary search tree example
+        SearchTree<Integer> searchTree = new BinarySearchTree<>();
+
+        int[] ints = new int[] {1, 2, 4, 6, 8, 10, 23, 25, 28};
+        for (int in :
+                ints) {
+            searchTree.insert(in);
+        }
+
+
+//        searchTree.insert(4);
+//        searchTree.insert(2);
+//        searchTree.insert(1);
+//        searchTree.insert(6);
+//        searchTree.insert(5);
+//        searchTree.insert(3);
+//        searchTree.insert(7);
+
+        System.out.println("4 exists: " + searchTree.search(4));
+        System.out.println("3 exists: " + searchTree.search(3));
+        System.out.println("10 exists: " + searchTree.search(10));
+
+        searchTree.delete(3);
+        searchTree.delete(4);
+
+        System.out.println("4 exists: " + searchTree.search(4));
+        System.out.println("3 exists: " + searchTree.search(3));
+        System.out.println("10 exists: " + searchTree.search(10));
+
+
+        for (Integer i :
+                searchTree) {
+            System.out.printf("%d ", i);
+        }
+
+        System.out.println();
+
+
+        // FIXME: simple tree example
+        TreeNode<String> aRoot = new TreeNode<>("A");
+        TreeNode<String> b = new TreeNode<>("B");
+        TreeNode<String> c = new TreeNode<>("C");
+        TreeNode<String> d = new TreeNode<>("D");
+        TreeNode<String> e = new TreeNode<>("E");
+        TreeNode<String> f = new TreeNode<>("F");
+
+        aRoot.setLeft(b);
+        aRoot.setRight(c);
+
+        b.setLeft(d);
+
+        c.setLeft(e);
+        c.setRight(f);
+
+        List<String> depthFirst = TreeUtil.depthFirst(aRoot);
+        System.out.println("Tree Depth first: "+ depthFirst);
+        System.out.println("Tree Depth first recursive: "+ TreeUtil.depthFirstRecurse(aRoot));
+
+        List<String> breadthFirst = TreeUtil.breadthFirst(aRoot);
+
+        System.out.println("Breadth first tree: " + breadthFirst);
+
+        System.out.println("Using iterator");
+        for (String s: aRoot) {
+            System.out.printf("%s ", s);
+        }
+        System.out.println();
+
+        Iterator<String> iterator = aRoot.iterator();
+        while (iterator.hasNext()) {
+            String next = iterator.next();
+            System.out.printf("%s ", next);
+        }
+
+        System.out.println("B exists" + TreeUtil.depthFirstSearch(aRoot, "B"));
+        System.out.println("X exists" + TreeUtil.depthFirstSearch(aRoot, "X"));
+        System.out.println("B exists" + TreeUtil.breadthFirstSearch(aRoot, "B"));
+        System.out.println("X exists" + TreeUtil.breadthFirstSearch(aRoot, "X"));
+
+        System.out.println("C Subtree: " + TreeUtil.breadthFirst(c));
+
+//        System.out.printf("Person with name %s, age: %d, salary %f", "John", 35, 3500.00);
+
+
+        System.out.println();
+
+
         // FIXME: merge sort example
-        Student vasyl = new Student("Vasyl", 21, 75);
-        Student anna = new Student("Anna", 22, 89);
-        Student petro = new Student("Petro", 35, 87);
-        Student ivan = new Student("Ivan", 48, 72);
-        Student olha = new Student("Olha", 31, 90);
-        Student maxim = new Student("Maxim", 37, 91);
+//        Student vasyl = new Student("Vasyl", 21, 75);
+//        Student anna = new Student("Anna", 22, 89);
+//        Student petro = new Student("Petro", 35, 87);
+//        Student ivan = new Student("Ivan", 48, 72);
+//        Student olha = new Student("Olha", 31, 90);
+//        Student maxim = new Student("Maxim", 37, 91);
+//
+//        Student[] students = new Student[] {
+//                vasyl, anna, petro, ivan, olha, maxim
+//        };
+////        SortUtils.bubbleSort(students);
+//        SortUtils.mergeSort(students, 0, students.length - 1);
+//        System.out.println("Sorted students " + Arrays.toString(students));
 
-        Student[] students = new Student[] {
-                vasyl, anna, petro, ivan, olha, maxim
-        };
-//        SortUtils.bubbleSort(students);
-        SortUtils.mergeSort(students, 0, students.length - 1);
-        System.out.println("Sorted students " + Arrays.toString(students));
-
-        int[] unsortedArr = new int[] {3, 45, 2, 6, 0, -2, 8, 13};
-        SortUtils.mergeSortInt(unsortedArr, 0, unsortedArr.length - 1);
-        System.out.println("Merge sort: " + Arrays.toString(unsortedArr));
+//        int[] unsortedArr = new int[] {3, 45, 2, 6, 0, -2, 8, 13};
+//        SortUtils.mergeSortInt(unsortedArr, 0, unsortedArr.length - 1);
+//        System.out.println("Merge sort: " + Arrays.toString(unsortedArr));
 
         // FIXME: bubble sort example
-        SortUtils.bubbleSortInt(unsortedArr);
-        System.out.println(Arrays.toString(unsortedArr));
+//        SortUtils.bubbleSortInt(unsortedArr);
+//        System.out.println(Arrays.toString(unsortedArr));
 
 
         // FIXME: binary search example
 
-        String[] strArr = new String[]{ "A", "B", "D", "M", "N", "P", "X"  };
-
-        System.out.println("Binary Search string: "
-                + SearchUtils.binarySearch(strArr, "D", 0, strArr.length));
-
-        int[] intArrSorted = new int[] {1, 4, 6, 9, 12, 34, 45, 47, 49};
-        System.out.println("Binary Search: " +
-                SearchUtils.binarySearchInt(intArrSorted, 34, 0, intArrSorted.length));
+//        String[] strArr = new String[]{ "A", "B", "D", "M", "N", "P", "X"  };
+//
+//        System.out.println("Binary Search string: "
+//                + SearchUtils.binarySearch(strArr, "D", 0, strArr.length));
+//
+//        int[] intArrSorted = new int[] {1, 4, 6, 9, 12, 34, 45, 47, 49};
+//        System.out.println("Binary Search: " +
+//                SearchUtils.binarySearchInt(intArrSorted, 34, 0, intArrSorted.length));
 
         // FIXME: linear search example
 
-        int[] intArr = {1, 4, 5, 6, 24, 9, -1};
-        Integer[] integers = {1, 4, 5, 6, 24, 9, -1};
+//        int[] intArr = {1, 4, 5, 6, 24, 9, -1};
+//        Integer[] integers = {1, 4, 5, 6, 24, 9, -1};
 
 
 
-        System.out.println("Linear search:"
-                +  SearchUtils.linearSearchInt(intArr, 5));
-        System.out.println("Linear search:"
-                +  SearchUtils.linearSearch(integers, 5));
-
-        System.out.println("Students: " + Arrays.toString(students));
-        System.out.println("Students search: " + SearchUtils.linearSearch(students, petro));
-
-        System.out.println(StringCustomUtils.reverse("Hello!"));
+//        System.out.println("Linear search:"
+//                +  SearchUtils.linearSearchInt(intArr, 5));
+//        System.out.println("Linear search:"
+//                +  SearchUtils.linearSearch(integers, 5));
+//
+//        System.out.println("Students: " + Arrays.toString(students));
+//        System.out.println("Students search: " + SearchUtils.linearSearch(students, petro));
+//
+//        System.out.println(StringCustomUtils.reverse("Hello!"));
 
 
         // FIXME: max and min generic recursive example
 
-        System.out.println("Max student: "
-                + ArithmeticUtils.max(vasyl, anna, petro, ivan, olha, maxim));
-        Comparator<Student> ageComparator = (s1, s2) -> s1.getAge() - s2.getAge();
-
-        System.out.println("Oldest student: "
-                + ArithmeticUtils.max(ageComparator, vasyl, anna, petro, ivan, olha, maxim));
+//        System.out.println("Max student: "
+//                + ArithmeticUtils.max(vasyl, anna, petro, ivan, olha, maxim));
+//        Comparator<Student> ageComparator = (s1, s2) -> s1.getAge() - s2.getAge();
+//
+//        System.out.println("Oldest student: "
+//                + ArithmeticUtils.max(ageComparator, vasyl, anna, petro, ivan, olha, maxim));
 
 
         // FIXME: max and min recursive example
 
-        System.out.println("max " + ArithmeticUtils.maxInt(3, 1, 67, 48, 9, -1, -23));
-        System.out.println("min " + ArithmeticUtils.minInt(3, 1, 67, 48, 9, -1, -23));
+//        System.out.println("max " + ArithmeticUtils.maxInt(3, 1, 67, 48, 9, -1, -23));
+//        System.out.println("min " + ArithmeticUtils.minInt(3, 1, 67, 48, 9, -1, -23));
 
         // FIXME: factorial recursive example
 
-        System.out.println("0! = " + ArithmeticUtils.factorial(0));
-        System.out.println("1! = " + ArithmeticUtils.factorial(1));
-        System.out.println("2! = " + ArithmeticUtils.factorial(2));
-        System.out.println("3! = " + ArithmeticUtils.factorial(3));
-        System.out.println("4! = " + ArithmeticUtils.factorial(4));
+//        System.out.println("0! = " + ArithmeticUtils.factorial(0));
+//        System.out.println("1! = " + ArithmeticUtils.factorial(1));
+//        System.out.println("2! = " + ArithmeticUtils.factorial(2));
+//        System.out.println("3! = " + ArithmeticUtils.factorial(3));
+//        System.out.println("4! = " + ArithmeticUtils.factorial(4));
 
         // 0! = 1
         // 1! = 1 = 1 * 0!
