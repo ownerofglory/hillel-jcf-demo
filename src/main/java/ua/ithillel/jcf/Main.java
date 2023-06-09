@@ -5,6 +5,9 @@ import ua.ithillel.jcf.algo.SearchUtils;
 import ua.ithillel.jcf.algo.SortUtils;
 import ua.ithillel.jcf.algo.StringCustomUtils;
 import ua.ithillel.jcf.comparator.GpaComparator;
+import ua.ithillel.jcf.generic.Container;
+import ua.ithillel.jcf.generic.ContainerUtil;
+import ua.ithillel.jcf.graph.GraphUtil;
 import ua.ithillel.jcf.map.MyHashMap;
 import ua.ithillel.jcf.map.MyMap;
 import ua.ithillel.jcf.map.MyTreeMap;
@@ -20,7 +23,114 @@ import java.util.*;
 
 public class Main {
 
+    public static void processList(List<String> list) {
+        for (String s :
+                list) {
+            System.out.println(s);
+        }
+    }
+
     public static void main(String[] args) {
+
+        // FIXME: generics demo
+
+        Container<? super Integer> someNumContainer = new Container<>(10.3);
+        someNumContainer = new Container<>(1);
+        someNumContainer = new Container<>(new Object());
+
+        Object value1 = someNumContainer.getValue();
+        someNumContainer.setValue(1);
+
+
+        Container<String> hello = ContainerUtil.createContainer("Hello");
+
+        var emptyContainer = ContainerUtil.<Student>createEmptyContainer();
+
+
+        Container rawContainer = new Container(1);
+
+        Container<Object> objectContainer = new Container<>(new Object());
+        Container<Number> numberContainer = new Container<>(30);
+        Container<Integer> intContainer = new Container<>(23);
+
+
+        numberContainer.compare(intContainer);
+
+        rawContainer = intContainer;
+        rawContainer = objectContainer;
+
+
+        Container<String> stringContainer = new Container<>("Hello");
+        Container<Student> studentContainer = new Container<>(new Student("John", 35));
+        Container<Integer> integerContainer = new Container<>(34);
+
+        Container<int[]> container = new Container<>(new int[5]);
+
+        System.out.println(stringContainer instanceof Container);
+        System.out.println(studentContainer instanceof Container);
+        System.out.println(integerContainer instanceof Container);
+
+        // auto boxing
+        Integer objInt = 1; // Integer.valueOf(1);
+        Number aNumber = objInt;
+
+        // aith unboxing
+
+        int primitiveInt = objInt; // objInt.intValue();
+
+
+        // check underlying type
+        String value = stringContainer.getValue();
+
+        Student student = studentContainer.getValue();
+
+
+        List<String> list = new ArrayList<>(); //diamond syntax
+        list.add("Hello");
+        list.add("Hillel");
+        list.add("Java");
+
+
+        processList(list);
+
+
+        // FIXME: undirected graph / edge list demo
+
+        Integer[][] edgeList = new Integer[][] {
+                {0, 1}, {1, 2}, {1, 4}, {2, 5}, {4, 5}, {4, 3}, {5, 8}, {5, 6}, {6, 7}
+        };
+
+
+        Map<Integer, List<Integer>> intGraph = GraphUtil.edgeListToAdjacency(edgeList);
+        System.out.println("From 0" + GraphUtil.depthFirstTraverse(intGraph, 0));
+        System.out.println("From 5" + GraphUtil.depthFirstTraverse(intGraph, 5));
+        System.out.println("From 3" + GraphUtil.depthFirstTraverse(intGraph, 3));
+
+        System.out.println("From 0" + GraphUtil.breadthFirstTraverse(intGraph, 0));
+        System.out.println("From 5" + GraphUtil.breadthFirstTraverse(intGraph, 5));
+        System.out.println("From 3" + GraphUtil.breadthFirstTraverse(intGraph, 3));
+
+        // FIXME: directed graph / adjacency list demo
+        Map<String, List<String>> graph = new HashMap<>();
+        graph.put("A", List.of("B", "D", "E"));
+        graph.put("B", List.of("C", "D"));
+        graph.put("C", List.of());
+        graph.put("D", List.of("C", "E", "A"));
+        graph.put("E", List.of());
+
+        System.out.println("Start from A: " + GraphUtil.depthFirstTraverse(graph, "A"));
+        System.out.println("Start from B: " + GraphUtil.depthFirstTraverse(graph, "B"));
+        System.out.println("Start from C: " + GraphUtil.depthFirstTraverse(graph, "C"));
+        System.out.println("Start from D: " + GraphUtil.depthFirstTraverse(graph, "D"));
+
+        System.out.println("Start from A: " + GraphUtil.breadthFirstTraverse(graph, "A"));
+        System.out.println("Start from B: " + GraphUtil.breadthFirstTraverse(graph, "B"));
+        System.out.println("Start from C: " + GraphUtil.breadthFirstTraverse(graph, "C"));
+        System.out.println("Start from D: " + GraphUtil.breadthFirstTraverse(graph, "D"));
+
+        System.out.println("From A to C: " + GraphUtil.hasPath(graph, "A", "C"));
+        System.out.println("From A to D: " + GraphUtil.hasPath(graph, "A", "D"));
+        System.out.println("From C to A: " + GraphUtil.hasPath(graph, "C", "A"));
 
         // FIXME: binary search tree example
         SearchTree<Integer> searchTree = new BinarySearchTree<>();

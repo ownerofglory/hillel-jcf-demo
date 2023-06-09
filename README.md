@@ -1,4 +1,4 @@
-# Hillel Data Structures and Algorithms demo
+# Hillel `Data Structures and Algorithms` demo
 
 
 ### Content
@@ -14,3 +14,4 @@
 - Sort algos
 - Tree algos: breadth and depth first
 - Binary Search Tree
+- Directed and undirected graph algos
