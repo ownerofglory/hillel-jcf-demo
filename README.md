@@ -15,3 +15,5 @@
 - Tree algos: breadth and depth first
 - Binary Search Tree
 - Directed and undirected graph algos
+- Functional interfaces and lambda expression demo
+- Stream API

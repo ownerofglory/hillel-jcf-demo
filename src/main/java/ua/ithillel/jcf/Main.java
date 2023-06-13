@@ -5,6 +5,9 @@ import ua.ithillel.jcf.algo.SearchUtils;
 import ua.ithillel.jcf.algo.SortUtils;
 import ua.ithillel.jcf.algo.StringCustomUtils;
 import ua.ithillel.jcf.comparator.GpaComparator;
+import ua.ithillel.jcf.function.ClickActionListener;
+import ua.ithillel.jcf.function.MyFunctionImpl;
+import ua.ithillel.jcf.function.MyInterface;
 import ua.ithillel.jcf.generic.Container;
 import ua.ithillel.jcf.generic.ContainerUtil;
 import ua.ithillel.jcf.graph.GraphUtil;
@@ -19,7 +22,15 @@ import ua.ithillel.jcf.tree.SearchTree;
 import ua.ithillel.jcf.tree.TreeNode;
 import ua.ithillel.jcf.tree.TreeUtil;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -31,115 +42,300 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        // C# LINQ
+        Stream<Integer> unendlessStream = Stream.generate(() -> (int) (Math.random() * 1000));
+
+        List<Integer> collect = unendlessStream.limit(100)
+                .filter(i -> i > 100)
+                .collect(Collectors.toList());
+
+        Stream<Integer> emptyStream = Stream.empty();
+
+        Stream<Integer> concat = Stream.concat(emptyStream, unendlessStream);
+
+        Stream<Integer> integerStream = Stream.of(1, 30, -3, -45, -35, 56, 0, 5);
+
+        // int sum = 0;
+        // sum += i;
+
+        Optional<Integer> sumOptional = integerStream.filter(i -> i < 0)
+                .map(i -> Math.abs(i))
+                .reduce((i, acc) -> acc + i);
+
+        if (sumOptional.isPresent()) {
+            Integer sum = sumOptional.get();
+            System.out.println("Sum of abs values of numbers < 0: " + sum);
+        }
+
+//        List<String> strings = integerStream.filter(i -> i > 0)
+//                .peek(i -> System.out.println("Greater than 0: " + i))
+//                .map(i -> i * 2)
+//                .peek(i -> System.out.println("multiplied by 2 : " + i))
+//                .filter(i -> i < 50)
+//                .peek(i -> System.out.println("Less than 50: " + i))
+//                .map(i -> "int: " + i)
+//                .collect(Collectors.toList());
+
+
+        Student vasyl = new Student("Vasyl", 21, 75);
+        Student anna = new Student("Anna", 22, 89);
+        Student petro = new Student("Petro", 35, 87);
+        Student ivan = new Student("Ivan", 48, 72);
+        Student olha = new Student("Olha", 31, 90);
+        Student maxim = new Student("Maxim", 37, 91);
+
+        List<Student> studentList = List.of(vasyl, anna, petro, ivan, olha, maxim);
+
+        Stream<Student> studentStream = studentList.stream();
+        List<String> students = studentStream.filter(student -> student.getAge() > 25)
+                .filter(student -> student.getGpa() > 70)
+                .filter(student -> student.getName().length() > 4)
+                .map(student -> student.getName())
+                .collect(Collectors.toList());
+
+        Map<String, Integer> studentMap = studentList.stream()
+                .filter(student -> student.getAge() > 25)
+                .filter(student -> student.getGpa() > 70)
+                .filter(student -> student.getName().length() > 4)
+                .collect(Collectors.toMap(student -> student.getName(), student -> student.getGpa()));
+
+        long count = studentList.stream()
+                .filter(student -> student.getGpa() > 70)
+                .count();
+
+        Optional<Student> minOptional = studentList.stream()
+                .filter(student -> student.getGpa() > 70)
+                .min((s1, s2) -> s1.getAge() - s2.getAge());
+
+        if (minOptional.isPresent()) {
+            Student student = minOptional.get();
+            System.out.println("Youngest student with GPA > 70:" + student);
+        }
+
+        System.out.println("Amount of stundets with GPA > 70: " + count);
+
+        Optional<Student> minByAgeAlphabetic = studentList.stream()
+                .filter(student -> student.getAge() > 60)
+                .min((s1, s2) -> s1.getName().compareTo(s2.getName()));
+
+//        if (minByAgeAlphabetic.isPresent()) {
+//            Student student = minByAgeAlphabetic.get();
+//            System.out.println("Older than 60 y.o. first by alphabet: " + student);
+//        } else {
+//            System.out.println(studentList.get(0));
+//        }
+
+        Student student2 = minByAgeAlphabetic.orElse(studentList.get(0));
+
+        Student student3 = minByAgeAlphabetic.orElseGet(() -> new Student());
+
+//        Student student4 = minByAgeAlphabetic.orElseThrow();
+
+        Integer sumOfGpa = studentList.stream()
+                .filter(student -> student.getGpa() > 75)
+                .reduce(0, (acc, student)
+                        -> acc + student.getGpa(), (acc, val) -> acc + val);
+
+        System.out.println("Sim of GPA of students with GPA > 75: "+ sumOfGpa);
+
+
+        try {
+            Student student5 = minByAgeAlphabetic.orElseThrow(() -> new Exception());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        Supplier<Student> randomStudentGenerator = () -> {
+            Random random = new Random();
+            int i = random.nextInt();
+            String name = "Student" + i;
+            int age = Math.abs(i);
+            return new Student(name, age);
+        };
+
+//        Supplier<Student> emptyStudentGenerator = () -> new Student();
+        Supplier<Student> emptyStudentGenerator = Student::new;
+
+        Student student1 = emptyStudentGenerator.get();
+
+        System.out.println(randomStudentGenerator.get());
+        System.out.println(randomStudentGenerator.get());
+        System.out.println(randomStudentGenerator.get());
+        System.out.println(randomStudentGenerator.get());
+
+//        java.util.function.Consumer<Student> studentPrinter = s -> System.out.println(s);
+        java.util.function.Consumer<Student> studentPrinter = System.out::println;
+
+        studentPrinter.accept(vasyl);
+        studentPrinter.accept(olha);
+        studentPrinter.accept(maxim);
+
+        Predicate<Student> agePredicate = student -> student.getAge() > 25;
+
+        List<Student> olderThanTwentyFive =
+                getMajorStudents(agePredicate,
+                        vasyl, anna, petro, ivan, olha, maxim);
+
+        System.out.println("Older than 25:" +  olderThanTwentyFive);
+
+        System.out.println(getMajorStudents(student -> student.getAge() > 35,
+                vasyl, anna, petro, ivan, olha, maxim));
+
+        Function<Student, String> studentNameConverter = student -> {
+            String name = student.getName();
+            return name.toLowerCase();
+        };
+
+        System.out.println(studentNameConverter.apply(vasyl));
+        System.out.println(studentNameConverter.apply(anna));
+
+
+        Function<String, Integer> stringLengthFunc = s -> s.length(); // creaing
+
+        System.out.println(stringLengthFunc.apply("Hello"));
+        System.out.println(stringLengthFunc.apply("Hillel"));
+
+
+
+
+        Comparator<Integer> integerComparator = (o1, o2) -> o1 - o2;
+
+
+
+        JFrame jFrame = new JFrame();
+        jFrame.setSize(100, 100);
+
+        JPanel jPanel = new JPanel();
+        JButton clickMe = new JButton("Click me");
+
+//        ActionListener clickListener = e -> System.out.println("Lambda: button clicked");
+
+        clickMe.addActionListener(System.out::println);
+
+        jPanel.add(clickMe);
+        jFrame.add(jPanel);
+
+        jFrame.setVisible(true);
+
+
+
+
+        MyInterface myInterface = new MyFunctionImpl();
+        myInterface.doSomethingElse();
+
+        MyInterface.printSomething();
+
+
 
         // FIXME: generics demo
 
-        Container<? super Integer> someNumContainer = new Container<>(10.3);
-        someNumContainer = new Container<>(1);
-        someNumContainer = new Container<>(new Object());
-
-        Object value1 = someNumContainer.getValue();
-        someNumContainer.setValue(1);
-
-
-        Container<String> hello = ContainerUtil.createContainer("Hello");
-
-        var emptyContainer = ContainerUtil.<Student>createEmptyContainer();
-
-
-        Container rawContainer = new Container(1);
-
-        Container<Object> objectContainer = new Container<>(new Object());
-        Container<Number> numberContainer = new Container<>(30);
-        Container<Integer> intContainer = new Container<>(23);
-
-
-        numberContainer.compare(intContainer);
-
-        rawContainer = intContainer;
-        rawContainer = objectContainer;
-
-
-        Container<String> stringContainer = new Container<>("Hello");
-        Container<Student> studentContainer = new Container<>(new Student("John", 35));
-        Container<Integer> integerContainer = new Container<>(34);
-
-        Container<int[]> container = new Container<>(new int[5]);
-
-        System.out.println(stringContainer instanceof Container);
-        System.out.println(studentContainer instanceof Container);
-        System.out.println(integerContainer instanceof Container);
-
-        // auto boxing
-        Integer objInt = 1; // Integer.valueOf(1);
-        Number aNumber = objInt;
-
-        // aith unboxing
-
-        int primitiveInt = objInt; // objInt.intValue();
-
-
-        // check underlying type
-        String value = stringContainer.getValue();
-
-        Student student = studentContainer.getValue();
-
-
-        List<String> list = new ArrayList<>(); //diamond syntax
-        list.add("Hello");
-        list.add("Hillel");
-        list.add("Java");
-
-
-        processList(list);
+//        Container<? super Integer> someNumContainer = new Container<>(10.3);
+//        someNumContainer = new Container<>(1);
+//        someNumContainer = new Container<>(new Object());
+//
+//        Object value1 = someNumContainer.getValue();
+//        someNumContainer.setValue(1);
+//
+//
+//        Container<String> hello = ContainerUtil.createContainer("Hello");
+//
+//        var emptyContainer = ContainerUtil.<Student>createEmptyContainer();
+//
+//
+//        Container rawContainer = new Container(1);
+//
+//        Container<Object> objectContainer = new Container<>(new Object());
+//        Container<Number> numberContainer = new Container<>(30);
+//        Container<Integer> intContainer = new Container<>(23);
+//
+//
+//        numberContainer.compare(intContainer);
+//
+//        rawContainer = intContainer;
+//        rawContainer = objectContainer;
+//
+//
+//        Container<String> stringContainer = new Container<>("Hello");
+//        Container<Student> studentContainer = new Container<>(new Student("John", 35));
+//        Container<Integer> integerContainer = new Container<>(34);
+//
+//        Container<int[]> container = new Container<>(new int[5]);
+//
+//        System.out.println(stringContainer instanceof Container);
+//        System.out.println(studentContainer instanceof Container);
+//        System.out.println(integerContainer instanceof Container);
+//
+//        // auto boxing
+//        Integer objInt = 1; // Integer.valueOf(1);
+//        Number aNumber = objInt;
+//
+//        // aith unboxing
+//
+//        int primitiveInt = objInt; // objInt.intValue();
+//
+//
+//        // check underlying type
+//        String value = stringContainer.getValue();
+//
+//        Student student = studentContainer.getValue();
+//
+//
+//        List<String> list = new ArrayList<>(); //diamond syntax
+//        list.add("Hello");
+//        list.add("Hillel");
+//        list.add("Java");
+//
+//
+//        processList(list);
 
 
         // FIXME: undirected graph / edge list demo
 
-        Integer[][] edgeList = new Integer[][] {
-                {0, 1}, {1, 2}, {1, 4}, {2, 5}, {4, 5}, {4, 3}, {5, 8}, {5, 6}, {6, 7}
-        };
-
-
-        Map<Integer, List<Integer>> intGraph = GraphUtil.edgeListToAdjacency(edgeList);
-        System.out.println("From 0" + GraphUtil.depthFirstTraverse(intGraph, 0));
-        System.out.println("From 5" + GraphUtil.depthFirstTraverse(intGraph, 5));
-        System.out.println("From 3" + GraphUtil.depthFirstTraverse(intGraph, 3));
-
-        System.out.println("From 0" + GraphUtil.breadthFirstTraverse(intGraph, 0));
-        System.out.println("From 5" + GraphUtil.breadthFirstTraverse(intGraph, 5));
-        System.out.println("From 3" + GraphUtil.breadthFirstTraverse(intGraph, 3));
+//        Integer[][] edgeList = new Integer[][] {
+//                {0, 1}, {1, 2}, {1, 4}, {2, 5}, {4, 5}, {4, 3}, {5, 8}, {5, 6}, {6, 7}
+//        };
+//
+//
+//        Map<Integer, List<Integer>> intGraph = GraphUtil.edgeListToAdjacency(edgeList);
+//        System.out.println("From 0" + GraphUtil.depthFirstTraverse(intGraph, 0));
+//        System.out.println("From 5" + GraphUtil.depthFirstTraverse(intGraph, 5));
+//        System.out.println("From 3" + GraphUtil.depthFirstTraverse(intGraph, 3));
+//
+//        System.out.println("From 0" + GraphUtil.breadthFirstTraverse(intGraph, 0));
+//        System.out.println("From 5" + GraphUtil.breadthFirstTraverse(intGraph, 5));
+//        System.out.println("From 3" + GraphUtil.breadthFirstTraverse(intGraph, 3));
 
         // FIXME: directed graph / adjacency list demo
-        Map<String, List<String>> graph = new HashMap<>();
-        graph.put("A", List.of("B", "D", "E"));
-        graph.put("B", List.of("C", "D"));
-        graph.put("C", List.of());
-        graph.put("D", List.of("C", "E", "A"));
-        graph.put("E", List.of());
-
-        System.out.println("Start from A: " + GraphUtil.depthFirstTraverse(graph, "A"));
-        System.out.println("Start from B: " + GraphUtil.depthFirstTraverse(graph, "B"));
-        System.out.println("Start from C: " + GraphUtil.depthFirstTraverse(graph, "C"));
-        System.out.println("Start from D: " + GraphUtil.depthFirstTraverse(graph, "D"));
-
-        System.out.println("Start from A: " + GraphUtil.breadthFirstTraverse(graph, "A"));
-        System.out.println("Start from B: " + GraphUtil.breadthFirstTraverse(graph, "B"));
-        System.out.println("Start from C: " + GraphUtil.breadthFirstTraverse(graph, "C"));
-        System.out.println("Start from D: " + GraphUtil.breadthFirstTraverse(graph, "D"));
-
-        System.out.println("From A to C: " + GraphUtil.hasPath(graph, "A", "C"));
-        System.out.println("From A to D: " + GraphUtil.hasPath(graph, "A", "D"));
-        System.out.println("From C to A: " + GraphUtil.hasPath(graph, "C", "A"));
+//        Map<String, List<String>> graph = new HashMap<>();
+//        graph.put("A", List.of("B", "D", "E"));
+//        graph.put("B", List.of("C", "D"));
+//        graph.put("C", List.of());
+//        graph.put("D", List.of("C", "E", "A"));
+//        graph.put("E", List.of());
+//
+//        System.out.println("Start from A: " + GraphUtil.depthFirstTraverse(graph, "A"));
+//        System.out.println("Start from B: " + GraphUtil.depthFirstTraverse(graph, "B"));
+//        System.out.println("Start from C: " + GraphUtil.depthFirstTraverse(graph, "C"));
+//        System.out.println("Start from D: " + GraphUtil.depthFirstTraverse(graph, "D"));
+//
+//        System.out.println("Start from A: " + GraphUtil.breadthFirstTraverse(graph, "A"));
+//        System.out.println("Start from B: " + GraphUtil.breadthFirstTraverse(graph, "B"));
+//        System.out.println("Start from C: " + GraphUtil.breadthFirstTraverse(graph, "C"));
+//        System.out.println("Start from D: " + GraphUtil.breadthFirstTraverse(graph, "D"));
+//
+//        System.out.println("From A to C: " + GraphUtil.hasPath(graph, "A", "C"));
+//        System.out.println("From A to D: " + GraphUtil.hasPath(graph, "A", "D"));
+//        System.out.println("From C to A: " + GraphUtil.hasPath(graph, "C", "A"));
 
         // FIXME: binary search tree example
-        SearchTree<Integer> searchTree = new BinarySearchTree<>();
-
-        int[] ints = new int[] {1, 2, 4, 6, 8, 10, 23, 25, 28};
-        for (int in :
-                ints) {
-            searchTree.insert(in);
-        }
+//        SearchTree<Integer> searchTree = new BinarySearchTree<>();
+//
+//        int[] ints = new int[] {1, 2, 4, 6, 8, 10, 23, 25, 28};
+//        for (int in :
+//                ints) {
+//            searchTree.insert(in);
+//        }
 
 
 //        searchTree.insert(4);
@@ -149,69 +345,69 @@ public class Main {
 //        searchTree.insert(5);
 //        searchTree.insert(3);
 //        searchTree.insert(7);
-
-        System.out.println("4 exists: " + searchTree.search(4));
-        System.out.println("3 exists: " + searchTree.search(3));
-        System.out.println("10 exists: " + searchTree.search(10));
-
-        searchTree.delete(3);
-        searchTree.delete(4);
-
-        System.out.println("4 exists: " + searchTree.search(4));
-        System.out.println("3 exists: " + searchTree.search(3));
-        System.out.println("10 exists: " + searchTree.search(10));
-
-
-        for (Integer i :
-                searchTree) {
-            System.out.printf("%d ", i);
-        }
-
-        System.out.println();
+//
+//        System.out.println("4 exists: " + searchTree.search(4));
+//        System.out.println("3 exists: " + searchTree.search(3));
+//        System.out.println("10 exists: " + searchTree.search(10));
+//
+//        searchTree.delete(3);
+//        searchTree.delete(4);
+//
+//        System.out.println("4 exists: " + searchTree.search(4));
+//        System.out.println("3 exists: " + searchTree.search(3));
+//        System.out.println("10 exists: " + searchTree.search(10));
+//
+//
+//        for (Integer i :
+//                searchTree) {
+//            System.out.printf("%d ", i);
+//        }
+//
+//        System.out.println();
 
 
         // FIXME: simple tree example
-        TreeNode<String> aRoot = new TreeNode<>("A");
-        TreeNode<String> b = new TreeNode<>("B");
-        TreeNode<String> c = new TreeNode<>("C");
-        TreeNode<String> d = new TreeNode<>("D");
-        TreeNode<String> e = new TreeNode<>("E");
-        TreeNode<String> f = new TreeNode<>("F");
-
-        aRoot.setLeft(b);
-        aRoot.setRight(c);
-
-        b.setLeft(d);
-
-        c.setLeft(e);
-        c.setRight(f);
-
-        List<String> depthFirst = TreeUtil.depthFirst(aRoot);
-        System.out.println("Tree Depth first: "+ depthFirst);
-        System.out.println("Tree Depth first recursive: "+ TreeUtil.depthFirstRecurse(aRoot));
-
-        List<String> breadthFirst = TreeUtil.breadthFirst(aRoot);
-
-        System.out.println("Breadth first tree: " + breadthFirst);
-
-        System.out.println("Using iterator");
-        for (String s: aRoot) {
-            System.out.printf("%s ", s);
-        }
-        System.out.println();
-
-        Iterator<String> iterator = aRoot.iterator();
-        while (iterator.hasNext()) {
-            String next = iterator.next();
-            System.out.printf("%s ", next);
-        }
-
-        System.out.println("B exists" + TreeUtil.depthFirstSearch(aRoot, "B"));
-        System.out.println("X exists" + TreeUtil.depthFirstSearch(aRoot, "X"));
-        System.out.println("B exists" + TreeUtil.breadthFirstSearch(aRoot, "B"));
-        System.out.println("X exists" + TreeUtil.breadthFirstSearch(aRoot, "X"));
-
-        System.out.println("C Subtree: " + TreeUtil.breadthFirst(c));
+//        TreeNode<String> aRoot = new TreeNode<>("A");
+//        TreeNode<String> b = new TreeNode<>("B");
+//        TreeNode<String> c = new TreeNode<>("C");
+//        TreeNode<String> d = new TreeNode<>("D");
+//        TreeNode<String> e = new TreeNode<>("E");
+//        TreeNode<String> f = new TreeNode<>("F");
+//
+//        aRoot.setLeft(b);
+//        aRoot.setRight(c);
+//
+//        b.setLeft(d);
+//
+//        c.setLeft(e);
+//        c.setRight(f);
+//
+//        List<String> depthFirst = TreeUtil.depthFirst(aRoot);
+//        System.out.println("Tree Depth first: "+ depthFirst);
+//        System.out.println("Tree Depth first recursive: "+ TreeUtil.depthFirstRecurse(aRoot));
+//
+//        List<String> breadthFirst = TreeUtil.breadthFirst(aRoot);
+//
+//        System.out.println("Breadth first tree: " + breadthFirst);
+//
+//        System.out.println("Using iterator");
+//        for (String s: aRoot) {
+//            System.out.printf("%s ", s);
+//        }
+//        System.out.println();
+//
+//        Iterator<String> iterator = aRoot.iterator();
+//        while (iterator.hasNext()) {
+//            String next = iterator.next();
+//            System.out.printf("%s ", next);
+//        }
+//
+//        System.out.println("B exists" + TreeUtil.depthFirstSearch(aRoot, "B"));
+//        System.out.println("X exists" + TreeUtil.depthFirstSearch(aRoot, "X"));
+//        System.out.println("B exists" + TreeUtil.breadthFirstSearch(aRoot, "B"));
+//        System.out.println("X exists" + TreeUtil.breadthFirstSearch(aRoot, "X"));
+//
+//        System.out.println("C Subtree: " + TreeUtil.breadthFirst(c));
 
 //        System.out.printf("Person with name %s, age: %d, salary %f", "John", 35, 3500.00);
 
@@ -705,5 +901,18 @@ public class Main {
 //
 //        int[] intArrayDefaultValue = new int[12];
 
+    }
+
+    public static List<Student> getMajorStudents(Predicate<Student> predicate, Student... students) {
+        List<Student> majorStudents = new ArrayList<>();
+
+        for (Student student :
+                students) {
+            if (predicate.test(student)) {
+                majorStudents.add(student);
+            }
+        }
+
+        return majorStudents;
     }
 }
